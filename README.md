@@ -1,5 +1,7 @@
 # Java 22 Leaning
-Use jshell & emacs eval buffer
+* dev: Use jshell & emacs eval buffer
+* docs: https://dev.java/playground/
+
 ## jshell
 `$ jshell --enable-preview`
 
@@ -9,6 +11,47 @@ jshell> var name = "Duke"; System.out.println("👋 Hello, " + name);
 name ==> "Duke"
 👋 Hello, Duke
 jshell>
+```
+## lambda 
+```java
+jshell> // Consumer with Unnamed Pattern
+   ...> List<String> strings = List.of("one", "two", "three");
+   ...> Consumer<String> notInterested = _ -> System.out.println("I'm not interested in this argument");
+   ...> strings.forEach(notInterested);
+strings ==> [one, two, three]
+notInterested ==> $Lambda/0x0000000129024a00@46fbb2c1
+I'm not interested in this argument
+I'm not interested in this argument
+I'm not interested in this argument
+jshell>
+// ======
+jshell> // Function with Unnamed Pattern
+   ...> List<String> strings = List.of("1", "11", "111");
+   ...> Function<String, Integer> constantLength = _ -> 3;
+   ...> var result = strings.stream()
+   ...>         .map(constantLength)
+   ...>         .toList();
+   ...> System.out.println("result = " + result);
+   ...>
+strings ==> [1, 11, 111]
+constantLength ==> $Lambda/0x0000000129025028@443b7951
+result ==> [3, 3, 3]
+result = [3, 3, 3]
+// =====
+jshell> // BiFunction with Unnamed Pattern
+   ...> var strings = List.of("one", "two", "three", "four");
+   ...> BiFunction<String, Integer, Integer> indexer = (_, i) -> i;
+   ...> var result = IntStream.range(0, strings.size())
+   ...>         .mapToObj(index -> indexer.apply(strings.get(index), index))
+   ...>         .toList();
+   ...> System.out.println("result = " + result);
+   ...>
+strings ==> [one, two, three, four]
+indexer ==> $Lambda/0x0000000129025c60@2328c243
+result ==> [0, 1, 2, 3]
+result = [0, 1, 2, 3]
+// =====
+
 ```
 ## map reduce (stream)
 ```java
@@ -160,5 +203,48 @@ $5 ==> "Square"
 jshell> square.edge()
 $6 ==> 100
 jshell>
+```
+## record
+```java
+jshell> // Simple record
+   ...> record Player(String last, String first, int level) {}
+   ...> var jane = new Player("Doe", "Jane", 42);
+   ...> System.out.println(jane);
+|  已创建 记录 Player
+jane ==> Player[last=Doe, first=Jane, level=42]
+Player[last=Doe, first=Jane, level=42]
+jshell>
+// ====
+jshell> // Composing
+   ...> record Population(int population) {}
+   ...> record City(String name, Population population) {
+   ...>     // static methods are allowed in records
+   ...>     public static City of(String name, int p) {
+   ...>         var population = new Population(p);
+   ...>         return new City(name, population);
+   ...>     }
+   ...> }
+|  已创建 记录 Population
+|  已创建 记录 City
 
+jshell> var paris = City.of("Paris", 2_161);
+   ...> System.out.println(paris);
+paris ==> City[name=Paris, population=Population[population=2161]]
+City[name=Paris, population=Population[population=2161]]
+
+jshell> paris
+paris ==> City[name=Paris, population=Population[population=2161]]
+
+jshell> paris.name()
+$15 ==> "Paris"
+
+jshell> paris.population()
+$16 ==> Population[population=2161]
+
+jshell> paris.population().
+clone()        equals(        finalize()     getClass()     hashCode()     notify()       notifyAll()    population()
+toString()     wait(
+jshell> paris.population().population()
+$17 ==> 2161
+jshell>
 ```
