@@ -1,6 +1,6 @@
 # Java 22 Leaning
 * dev: Use jshell & emacs eval buffer
-* docs: https://dev.java/playground/
+* docs: https://dev.java/playground/ , https://www.happycoders.eu/java/java-22-features/, https://medium.com/@phoenixrising_93140/java-22-features-a-sneak-peek-1892273f9ed0
 
 ## jshell
 `$ jshell --enable-preview`
