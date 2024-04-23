@@ -14,7 +14,6 @@ jshell> List<String> cities =
    ...>             Arrays.asList("Shenzhen", "Brussels", "Taipei", "Buenos Aires", "Sydney", "Bristol");
    ...>
 cities ==> [Shenzhen, Brussels, Taipei, Buenos Aires, Sydney, Bristol]
-
 jshell> cities.stream()
    ...>       .filter(s -> s.startsWith("B"))
    ...>       .map(String::toUpperCase)
@@ -24,6 +23,36 @@ jshell> cities.stream()
 BRISTOL
 BRUSSELS
 BUENOS AIRES
+jshell>
+```
+## sorted, and stream to list
+```
+jshell> Stream<String> stream = Stream.of("Shenzhen", "Brussels", "Taipei", "Buenos Aires", "Sydney", "Bristol");
+   ...>
+   ...> List<String> cities = stream.sorted().collect(Collectors.toList());
+   ...>
+   ...> System.out.println(cities);
+stream ==> java.util.stream.ReferencePipeline$Head@1e80bfe8
+cities ==> [Bristol, Brussels, Buenos Aires, Shenzhen, Sydney, Taipei]
+[Bristol, Brussels, Buenos Aires, Shenzhen, Sydney, Taipei]
+jshell>
+```
+## stream & list convert
+```java
+jshell> var cities = """
+   ...>       San Francisco
+   ...>       Casablanca
+   ...>       Antwerp
+   ...>       New Delhi
+   ...>       Osaka
+   ...> """;
+   ...>
+   ...> Stream<String> lines = cities.lines();
+   ...>
+   ...> System.out.println(lines.toList());
+cities ==> "      San Francisco\n      Casablanca\n      Ant ...  New Delhi\n      Osaka\n"
+lines ==> java.util.stream.ReferencePipeline$Head@2dda6444
+[      San Francisco,       Casablanca,       Antwerp,       New Delhi,       Osaka]
 jshell>
 ```
 ## Class & Object
