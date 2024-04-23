@@ -1,6 +1,8 @@
 # Java 22 Leaning
 Use jshell & emacs eval buffer
 ## jshell
+`$ jshell --enable-preview`
+
 ```java
 jshell> var name = "Duke"; System.out.println("👋 Hello, " + name);
    ...>
@@ -110,4 +112,53 @@ public class EmployeeTest{
       empTwo.printEmployee();
    }
 }
+```
+## super (extends class)
+```java
+jshell> // Statement before super
+   ...> static class Shape {
+   ...>     private String name;
+   ...>     public Shape(String name) {
+   ...>         if (name == null) {
+   ...>             throw new IllegalArgumentException("User should not be null");
+   ...>         }
+   ...>         super();
+   ...>         this.name = name;
+   ...>     }
+   ...>     public String name() {
+   ...>         return name;
+   ...>     }
+   ...> }
+|  已创建 类 Shape
+
+jshell> static class Square extends Shape {
+   ...>     private int edge;
+   ...>     public Square(int edge) {
+   ...>         if (edge <= 0) {
+   ...>             throw new IllegalArgumentException("Edge should be greater than 0");
+   ...>         }
+   ...>         super("Square");
+   ...>         this.edge = edge;
+   ...>     }
+   ...>     public int edge() {
+   ...>         return edge;
+   ...>     }
+   ...>     public String toString() {
+   ...>         return "Square[" + edge + "]";
+   ...>     }
+   ...> }
+   ...>
+|  已创建 类 Square
+
+jshell> Square square = new Square(100);
+   ...> System.out.println("square = " + square);
+square ==> Square[100]
+square = Square[100]
+
+jshell> square.name()
+$5 ==> "Square"
+jshell> square.edge()
+$6 ==> 100
+jshell>
+
 ```
