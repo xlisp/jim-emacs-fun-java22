@@ -304,3 +304,74 @@ Div[left=12, right=4] = 3
 
 jshell>
 ```
+## partition
+```java
+jshell> var strings = List.of("one", "two", "three", "four", "five");
+   ...>
+strings ==> [one, two, three, four, five]
+
+jshell> Gatherer<String, ?, List<String>> fixedWindow =
+   ...>         Gatherers.windowFixed(2);
+fixedWindow ==> GathererImpl[initializer=java.util.stream.Gathere ... 000000012b07b490@161cd475]
+
+jshell> var result = strings.stream()
+   ...>         .gather(fixedWindow)
+   ...>         .toList();
+result ==> [[one, two], [three, four], [five]]
+
+jshell> strings.stream().gather(Gatherers.windowFixed(3))
+$13 ==> java.util.stream.GathererOp@27ddd392
+
+jshell> strings.stream().gather(Gatherers.windowFixed(3)).toList()
+$14 ==> [[one, two, three], [four, five]]
+
+jshell>
+jshell> strings.stream().gather(Gatherers.windowSliding(2)).toList()
+$15 ==> [[one, two], [two, three], [three, four], [four, five]]
+
+// ====
+jshell> // Summing the sliding windows
+   ...> var strings = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+   ...> Gatherer<Integer, ?, List<Integer>> createSlidingWindows =
+   ...>         Gatherers.windowSliding(2);
+   ...> var result = strings.stream()
+   ...>         .gather(createSlidingWindows)
+   ...>         .map(windows -> windows.stream().mapToInt(i -> i).sum())
+   ...>         .toList();
+   ...> System.out.println("result = " + result);
+strings ==> [1, 2, 3, 4, 5, 6, 7, 8, 9]
+createSlidingWindows ==> GathererImpl[initializer=java.util.stream.Gathere ... 000000012b07e8b8@6d1e7682]
+result ==> [3, 5, 7, 9, 11, 13, 15, 17]
+result = [3, 5, 7, 9, 11, 13, 15, 17]
+
+jshell>
+
+// =======
+jshell> // Composing gatherers to remove noise
+   ...> var strings = List.of(5, 5, 5, 1, 5, 5, 5, 1, 5, 5, 1, 5);
+   ...> Gatherer<Integer, ?, List<Integer>> slide =
+   ...>         Gatherers.windowSliding(3);
+   ...> Gatherer<List<Integer>, ?, List<Integer>> smooth =
+   ...>         Gatherer.of((_, list, downstream) -> {
+   ...>             int max = list.stream().mapToInt(n -> n).max().orElseThrow();
+   ...>             list = List.of(max, max, max);
+   ...>             return downstream.push(list);
+   ...>         });
+   ...> Gatherer<List<Integer>, ?, Integer> unslide =
+   ...>         Gatherer.of((_, list, downStream) -> downStream.push(list.getFirst()));
+   ...> Gatherer<Integer, ?, Integer> smoothOnASlidingWindow =
+   ...>         slide.andThen(smooth).andThen(unslide);
+   ...> var result = strings.stream()
+   ...>         .gather(smoothOnASlidingWindow)
+   ...>         .toList();
+   ...> System.out.println("result = " + result);
+strings ==> [5, 5, 5, 1, 5, 5, 5, 1, 5, 5, 1, 5]
+slide ==> GathererImpl[initializer=java.util.stream.Gathere ... 000000012b07e8b8@6d1e7682]
+smooth ==> GathererImpl[initializer=DEFAULT, integrator=$Lam ... 842775d, finisher=DEFAULT]
+unslide ==> GathererImpl[initializer=DEFAULT, integrator=$Lam ... 842775d, finisher=DEFAULT]
+smoothOnASlidingWindow ==> java.util.stream.Gatherers$Composite@3f102e87
+result ==> [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+result = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+jshell>
+```
+
