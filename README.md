@@ -1,5 +1,6 @@
 # Java 22 Leaning
-## Class 
+Use jshell & emacs eval buffer
+## Class & Object
 ```java
 
 import java.io.*;
