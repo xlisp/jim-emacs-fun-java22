@@ -1,5 +1,31 @@
 # Java 22 Leaning
 Use jshell & emacs eval buffer
+## jshell
+```java
+jshell> var name = "Duke"; System.out.println("👋 Hello, " + name);
+   ...>
+name ==> "Duke"
+👋 Hello, Duke
+jshell>
+```
+## map reduce (stream)
+```java
+jshell> List<String> cities =
+   ...>             Arrays.asList("Shenzhen", "Brussels", "Taipei", "Buenos Aires", "Sydney", "Bristol");
+   ...>
+cities ==> [Shenzhen, Brussels, Taipei, Buenos Aires, Sydney, Bristol]
+
+jshell> cities.stream()
+   ...>       .filter(s -> s.startsWith("B"))
+   ...>       .map(String::toUpperCase)
+   ...>       .sorted()
+   ...>       .forEach(System.out::println);
+   ...>
+BRISTOL
+BRUSSELS
+BUENOS AIRES
+jshell>
+```
 ## Class & Object
 ```java
 
@@ -56,4 +82,3 @@ public class EmployeeTest{
    }
 }
 ```
-
