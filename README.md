@@ -248,3 +248,59 @@ jshell> paris.population().population()
 $17 ==> 2161
 jshell>
 ```
+## Pattern Matching
+```java
+jshell> sealed interface Operation permits Add, Mult, Sub, Div {}
+   ...>
+   ...> record Add(int left, int right) implements Operation  {}
+   ...> record Mult(int left, int right) implements Operation  {}
+   ...> record Sub(int left, int right) implements Operation  {}
+   ...> record Div(int left, int right) implements Operation  {}
+   ...>
+|  已创建 接口 Operation, 不过, 它无法引用, 直至 class Add, class Mult, class Sub, and class Div 已声明
+|  已创建 记录 Add, 不过, 它无法引用, 直至 class Operation 已声明
+|  已创建 记录 Mult, 不过, 它无法引用, 直至 class Operation 已声明
+|  已创建 记录 Sub, 不过, 它无法引用, 直至 class Operation 已声明
+|  已创建 记录 Div
+
+jshell> public static boolean naturalNumber(Operation operation) {
+   ...>     return switch (operation) {
+   ...>         case Add _ -> true;
+   ...>         case Mult _ -> true;
+   ...>         case Sub(int left, int right) -> left > right;
+   ...>         case Div(int left, int right) -> left % right == 0;
+   ...>     };
+   ...> }
+   ...> public static int resolve(Operation operation) {
+   ...>     return switch(operation) {
+   ...>         case Add(int left, int right) -> left + right;
+   ...>         case Mult(int left, int right) -> left * right;
+   ...>         case Sub(int left, int right) -> left - right;
+   ...>         case Div(int left, int right) -> left / right;
+   ...>     };
+   ...> }
+   ...>
+|  已创建 方法 naturalNumber(Operation)
+|  已创建 方法 resolve(Operation)
+
+jshell> var operations = List.of(
+   ...>         new Add(1, 2),
+   ...>         new Mult(4, 3),
+   ...>         new Sub(0, 3), new Sub(4, 3),
+   ...>         new Div(9, 4), new Div(1, 3), new Div(12, 4));
+operations ==> [Add[left=1, right=2], Mult[left=4, right=3], Sub ... 3], Div[left=12, right=4]]
+
+jshell> operations.forEach(operation -> {
+   ...>     System.out.println(operation + (
+   ...>             naturalNumber(operation) ? " = " + resolve(operation): " -> result is not a natural integer"));
+   ...> });
+Add[left=1, right=2] = 3
+Mult[left=4, right=3] = 12
+Sub[left=0, right=3] -> result is not a natural integer
+Sub[left=4, right=3] = 1
+Div[left=9, right=4] -> result is not a natural integer
+Div[left=1, right=3] -> result is not a natural integer
+Div[left=12, right=4] = 3
+
+jshell>
+```
