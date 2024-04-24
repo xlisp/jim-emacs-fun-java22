@@ -31,3 +31,50 @@
 ;; (partition number offset list)
 (partition 2 2 nil (list "one" , "two" , "three" , "four" , "five"))
 ;; => (("one" "two") ("three" "four") ("five"))
+
+;; ===== defrecord
+(defrecord Person [fname lname address])
+(defrecord Address [street city state zip])
+
+(def stu (Person. "Stu" "Halloway"
+           (Address. "200 N Mangum"
+             "Durham"
+             "NC"
+             27701)))
+
+(:lname stu)
+
+(-> stu :address :city)
+;; => "Durham"
+
+(update-in stu [:address :zip] inc)
+;; => #dimensionality.reduction.Person{:fname "Stu", :lname "Halloway", :address #dimensionality.reduction.Address{:street "200 N Mangum", :city "Durham", :state "NC", :zip 27702}}
+
+;; ========= https://clojure.org/reference/java_interop ===> (doto (new java.util.HashMap) (.put "a" 1) (.put "b" 2))
+;; === implement a Java interface in defrecord
+(import java.net.FileNameMap)
+
+(defrecord Thing [a]
+  FileNameMap
+  (getContentTypeFor [this fileName] (str a "-" fileName)))
+
+(def thing (Thing. "foo"))
+
+(instance? FileNameMap thing)
+;; => true
+
+(map #(println %) (.getInterfaces Thing))
+;; =>
+;; java.net.FileNameMap
+;; clojure.lang.IRecord
+;; clojure.lang.IHashEq
+;; clojure.lang.IObj
+;; clojure.lang.ILookup
+;; clojure.lang.IKeywordLookup
+;; clojure.lang.IPersistentMap
+;; java.util.Map
+;; java.io.Serializable
+;;
+
+(.getContentTypeFor thing "bar")
+;; => "foo-bar"

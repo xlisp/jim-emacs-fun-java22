@@ -110,7 +110,16 @@ jshell>
 ```
 ## Class & Object
 ```java
-
+// ====clojure===> ./gen-class.clj
+//(gen-class
+//	:name "some.package.RefMap"
+//	:implements [java.util.Map]
+//	:state "state"
+//	:init "init"
+//	:constructors {[] []}
+//	:prefix "ref-map-")
+// (defn ref-map-init []
+// 	[[] (ref {})])
 import java.io.*;
 
 public class Employee{
@@ -214,6 +223,8 @@ jshell>
 ```
 ## record
 ```java
+// ====clojure==== (defrecord Person [fname lname address]) => (Person. "Stu" "Halloway" ...)
+//
 jshell> // Simple record
    ...> record Player(String last, String first, int level) {}
    ...> var jane = new Player("Doe", "Jane", 42);
