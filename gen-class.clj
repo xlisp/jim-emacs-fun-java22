@@ -6,6 +6,14 @@
 	:constructors {[] []}
 	:prefix "ref-map-")
 
+;; java 和 clojure互操作相关函数：https://clojure.org/reference/java_interop
+;; https://clojuredocs.org/clojure.core/proxy-super
+;; https://clojuredocs.org/clojure.core/proxy
+;; https://clojuredocs.org/clojure.core/gen-interface
+;; https://clojuredocs.org/clojure.core/reify
+;; https://clojuredocs.org/clojure.core/gen-class
+;; https://clojuredocs.org/clojure.core/extend
+
 ;; 传入一个@state or this，万能的atom就可以了操作测试了
 
 (defn ref-map-init []
