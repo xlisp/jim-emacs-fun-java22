@@ -20,6 +20,8 @@
   sort
   (run! println))
 
+(map (fn [[a b]] (+ a b)) (partition 2 1 (list 1, 2, 3, 4, 5, 6, 7, 8, 9)))
+;; => (3 5 7 9 11 13 15 17)
 
 ;; Gatherers.windowSliding(2)
 (partition 2 1 (list "one" , "two" , "three" , "four" , "five"))

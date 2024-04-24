@@ -12,8 +12,9 @@ name ==> "Duke"
 👋 Hello, Duke
 jshell>
 ```
-## lambda 
+## lambda
 ```java
+// ====clojure= (run! println (list "one", "two", "three"))
 jshell> // Consumer with Unnamed Pattern
    ...> List<String> strings = List.of("one", "two", "three");
    ...> Consumer<String> notInterested = _ -> System.out.println("I'm not interested in this argument");
@@ -24,7 +25,7 @@ I'm not interested in this argument
 I'm not interested in this argument
 I'm not interested in this argument
 jshell>
-// ======
+// =====clojure=== (map (fn [_] 3) (list "1" , "11" , "111"))
 jshell> // Function with Unnamed Pattern
    ...> List<String> strings = List.of("1", "11", "111");
    ...> Function<String, Integer> constantLength = _ -> 3;
@@ -37,7 +38,7 @@ strings ==> [1, 11, 111]
 constantLength ==> $Lambda/0x0000000129025028@443b7951
 result ==> [3, 3, 3]
 result = [3, 3, 3]
-// =====
+// =====clojure== (map-indexed (fn [i v] i) (list "one", "two", "three", "four"))
 jshell> // BiFunction with Unnamed Pattern
    ...> var strings = List.of("one", "two", "three", "four");
    ...> BiFunction<String, Integer, Integer> indexer = (_, i) -> i;
@@ -50,11 +51,18 @@ strings ==> [one, two, three, four]
 indexer ==> $Lambda/0x0000000129025c60@2328c243
 result ==> [0, 1, 2, 3]
 result = [0, 1, 2, 3]
-// =====
+// =====clojure==
 
 ```
 ## map reduce (stream)
 ```java
+// =====clojure=
+// (->>
+//   (list "Shenzhen", "Brussels", "Taipei", "Buenos Aires", "Sydney", "Bristol")
+//   (filter (fn [s] (re-find #"^B" s)))
+//   (map clojure.string/upper-case)
+//   sort
+//   (run! println))
 jshell> List<String> cities =
    ...>             Arrays.asList("Shenzhen", "Brussels", "Taipei", "Buenos Aires", "Sydney", "Bristol");
    ...>
@@ -104,7 +112,7 @@ jshell>
 ```java
 
 import java.io.*;
- 
+
 public class Employee{
    String name;
    int age;
@@ -137,18 +145,18 @@ public class Employee{
 // => Test
 import java.io.*;
 public class EmployeeTest{
- 
+
    public static void main(String[] args){
       /* 使用构造器创建两个对象 */
       Employee empOne = new Employee("RUNOOB1");
       Employee empTwo = new Employee("RUNOOB2");
- 
+
       // 调用这两个对象的成员方法
       empOne.empAge(26);
       empOne.empDesignation("高级程序员");
       empOne.empSalary(1000);
       empOne.printEmployee();
- 
+
       empTwo.empAge(21);
       empTwo.empDesignation("菜鸟程序员");
       empTwo.empSalary(500);
@@ -214,7 +222,7 @@ jshell> // Simple record
 jane ==> Player[last=Doe, first=Jane, level=42]
 Player[last=Doe, first=Jane, level=42]
 jshell>
-// ====
+// =====clojure=
 jshell> // Composing
    ...> record Population(int population) {}
    ...> record City(String name, Population population) {
@@ -306,6 +314,7 @@ jshell>
 ```
 ## partition
 ```java
+// =====clojure= (partition 2 2 nil (list "one" , "two" , "three" , "four" , "five"))
 jshell> var strings = List.of("one", "two", "three", "four", "five");
    ...>
 strings ==> [one, two, three, four, five]
@@ -329,7 +338,7 @@ jshell>
 jshell> strings.stream().gather(Gatherers.windowSliding(2)).toList()
 $15 ==> [[one, two], [two, three], [three, four], [four, five]]
 
-// ====
+// =====clojure= (map (fn [[a b]] (+ a b)) (partition 2 1 (list 1, 2, 3, 4, 5, 6, 7, 8, 9)))
 jshell> // Summing the sliding windows
    ...> var strings = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
    ...> Gatherer<Integer, ?, List<Integer>> createSlidingWindows =
@@ -346,7 +355,7 @@ result = [3, 5, 7, 9, 11, 13, 15, 17]
 
 jshell>
 
-// =======
+// =====clojure====
 jshell> // Composing gatherers to remove noise
    ...> var strings = List.of(5, 5, 5, 1, 5, 5, 5, 1, 5, 5, 1, 5);
    ...> Gatherer<Integer, ?, List<Integer>> slide =
@@ -374,4 +383,3 @@ result ==> [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
 result = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
 jshell>
 ```
-
