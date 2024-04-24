@@ -1,6 +1,6 @@
 (ns dimensionality.reduction)
 
-;; 你记忆力很差，只能记住元结构，很依赖于谷歌: 比如clojure你还需要 https://clojuredocs.org/的帮忙，不然你记不住这些长的名字。
+;; 你记忆力很差(为什么会出现考试脑子一片空白的问题)，只能记住元结构，很依赖于谷歌: 比如clojure你还需要 https://clojuredocs.org/的帮忙，不然你记不住这些长的名字。
 
 (doseq [i (list "one", "two", "three")]
   (println i))
